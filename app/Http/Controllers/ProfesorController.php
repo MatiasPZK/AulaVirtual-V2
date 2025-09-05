@@ -23,10 +23,9 @@ class ProfesorController extends Controller
         $request->validate([
             'nombre' => 'required|string|max:255',
             'especialidad' => 'nullable|string|max:255',
-            'aula' => 'nullable|string|max:255',
         ]);
 
-        Profesor::create($request->only('nombre','especialidad','aula'));
+        Profesor::create($request->only('nombre','especialidad'));
 
         return redirect()->route('profesores.index')->with('success', 'Profesor creado correctamente');
     }
@@ -41,10 +40,9 @@ class ProfesorController extends Controller
         $request->validate([
             'nombre' => 'required|string|max:255',
             'especialidad' => 'nullable|string|max:255',
-            'aula' => 'nullable|string|max:255',
         ]);
 
-        $profesor->update($request->only('nombre','especialidad','aula'));
+        $profesor->update($request->only('nombre','especialidad'));
 
         return redirect()->route('profesores.index')->with('success', 'Profesor actualizado correctamente');
     }

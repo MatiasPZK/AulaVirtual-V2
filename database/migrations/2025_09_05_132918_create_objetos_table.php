@@ -13,10 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('profesores', function (Blueprint $table) {
+        Schema::create('objetos', function (Blueprint $table) {
             $table->id();
             $table->string('nombre');
-            $table->string('especialidad')->nullable();
+            $table->string('tipo')->nullable();
+            $table->foreignId('aula_id')->constrained('aulas')->onDelete('cascade'); // Relación con aulas
             $table->timestamps();
         });
     }
@@ -28,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('profesors');
+        Schema::dropIfExists('objetos');
     }
 };
