@@ -6,7 +6,7 @@
 <div class="container mt-5">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="animate__animated animate__fadeInLeft"><i class="bi bi-building"></i> Listado de Aulas</h2>
-        <a href="{{ route('aulas.create') }}" class="btn btn-primary btn-lg animate__animated animate__fadeInRight">
+        <a href="{{ route('aulas.create') }}" class="btn btn-primary btn-custom mt-4">
             <i class="bi bi-plus-circle"></i> Crear Aula
         </a>
     </div>

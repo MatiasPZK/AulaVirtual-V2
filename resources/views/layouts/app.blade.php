@@ -3,86 +3,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title') - Aula Virtual</title>
+    <title>@yield('title', 'Aula Virtual')</title>
 
-    {{-- Bootstrap CSS --}}
+    {{-- Bootstrap 5 --}}
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    {{-- Bootstrap Icons --}}
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-
-    {{-- Animate.css --}}
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
-
+    {{-- Tipografía y estilos generales --}}
     <style>
-        body {
-            background: linear-gradient(to right, #6a11cb, #2575fc);
-            min-height: 100vh;
-            color: #333;
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: "Figtree", sans-serif;
+            color: white;
+            overflow-x: hidden;
         }
 
+        /* Fondo aurora boreal cósmica con tonos negros y grises */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at 20% 30%, #474747ff, #000000ff, #333333ff, #a8a2a2ff);
+            background-size: 400% 400%;
+            animation: auroraBG 20s ease infinite;
+        }
+
+        @keyframes auroraBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Navbar minimalista */
         .navbar {
-            background: rgba(0,0,0,0.4) !important;
+            background: transparent !important;
         }
 
-        .card {
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        /* Botones generales */
+        .btn-custom {
+            border-radius: 9999px;
+            transition: all 0.3s ease;
+        }
+        .btn-custom:hover {
+            transform: scale(1.1);
         }
 
-        .btn-lg {
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-
-        .btn-lg:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-        }
-
-        /* Animación para los cards */
-        .animate-card {
-            animation: fadeInUp 0.8s ease forwards;
-        }
-
-        @keyframes fadeInUp {
-            0% {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        /* Contenedor de contenido */
+        .content-section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
         }
     </style>
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-dark fixed-top">
-    <div class="container">
-        <a class="navbar-brand fw-bold" href="{{ url('/') }}">Aula Virtual</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navbarNav">
-            {{-- Buscador --}}
-            <form class="d-flex ms-auto" role="search" action="{{ route('buscar') }}" method="GET">
-                <input class="form-control me-2" type="search" name="q" placeholder="Buscar..." aria-label="Buscar" value="{{ request('q') }}">
-                <button class="btn btn-outline-light" type="submit"><i class="bi bi-search"></i> Buscar</button>
-            </form>
+    {{-- Navbar --}}
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            {{-- Logo / Texto que lleva al welcome --}}
+            <a class="navbar-brand fw-bold fs-3" href="{{ route('welcome') }}">Aula Virtual</a>
         </div>
-    </div>
-</nav>
+    </nav>
 
-{{-- Contenido principal --}}
-<div class="pt-5 mt-4">
-    @yield('content')
-</div>
+    {{-- Contenido principal --}}
+    <main>
+        @yield('content')
+    </main>
 
-{{-- Bootstrap JS --}}
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    {{-- Bootstrap JS --}}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>

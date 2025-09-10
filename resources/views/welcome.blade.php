@@ -1,93 +1,138 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aula Virtual</title>
+@extends('layouts.app')
 
-    {{-- Bootstrap 5 --}}
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+@section('title', 'Bienvenido al Aula Virtual')
 
-    {{-- Animate.css --}}
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+@section('content')
+<style>
+    /* Fondo general de la página */
+    body {
+        background: linear-gradient(120deg, #000000, #1a1a1a, #2e2e2e, #000000);
+        overflow-x: hidden;
+        color: white;
+    }
 
-    <style>
-        body {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            min-height: 100vh;
-            color: white;
-        }
+    /* Caja de presentación con aurora boreal */
+    .hero-box {
+        position: relative;
+        margin: 2rem auto;
+        width: 90%;
+        min-height: 95vh;
+        border-radius: 1.5rem;
+        overflow: hidden;
+        padding: 4rem 3rem;
+        text-align: left;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        background: linear-gradient(120deg, #000000, #8b5cf6, #ffffff, #1e1b4b, #4c1d95);
+        background-size: 600% 600%;
+        animation: gradientBG 30s ease infinite;
+        box-shadow: 0 0 40px rgba(255,255,255,0.1);
+    }
 
-        .hero {
-            height: 80vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-        }
+    @keyframes gradientBG {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
 
-        .btn-landing {
-            margin: 10px;
-            font-size: 1.2rem;
-        }
+    .hero-box h1 .italic {
+        font-style: italic;
+        font-family: 'Playfair Display', serif;
+        font-size: 3rem;
+    }
 
-        /* Efecto sutil de sombra y transición en botones */
-        .btn-landing:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            transition: 0.3s;
-        }
+    .hero-box h1 .normal {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 2rem;
+        display: block;
+        margin-top: 0.5rem;
+    }
 
-        /* Buscador más grande y consistente */
-        .navbar .form-control-lg {
-            width: 250px;
-        }
-    </style>
-</head>
-<body>
-    {{-- Navbar minimalista --}}
-    <nav class="navbar navbar-expand-lg navbar-dark" style="background: transparent;">
-        <div class="container">
-            <a class="navbar-brand fw-bold fs-3" href="#">Aula Virtual</a>
+    .hero-box p {
+        margin-top: 1rem;
+        font-size: 1rem;
+        opacity: 0.8;
+    }
 
-            {{-- Buscador --}}
-            <form class="d-flex ms-auto" role="search">
-                <input class="form-control me-2 form-control-lg" type="search" placeholder="Buscar..." aria-label="Buscar">
-                <button class="btn btn-outline-light btn-lg" type="submit">Buscar</button>
-            </form>
-        </div>
-    </nav>
+    .btn-outline-light {
+        color: white;
+        border: 1px solid white;
+        font-weight: 300;
+        background-color: transparent;
+        transition: all 0.3s ease;
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+        margin-top: 2rem;
+        align-self: start;
+        border-radius: 1rem;
+        width: 200px;
+        text-align: center;
+    }
 
-    {{-- Hero Section --}}
-    <section class="hero">
-        <h1 class="animate__animated animate__fadeInDown">Bienvenido a Aula Virtual</h1>
-        <p class="lead animate__animated animate__fadeInUp animate__delay-1s">
-            Gestiona aulas, profesores, objetos y sistemas automatizados de manera fácil e intuitiva.
-        </p>
+    .btn-outline-light:hover {
+        background-color: rgba(255,255,255,0.1);
+        transform: scale(1.05);
+    }
 
-        <div class="animate__animated animate__fadeInUp animate__delay-2s d-flex flex-wrap justify-content-center">
-            <a href="{{ route('aulas.index') }}" class="btn btn-primary btn-lg btn-landing">Aulas</a>
-            <a href="{{ route('profesores.index') }}" class="btn btn-success btn-lg btn-landing">Profesores</a>
-            <a href="{{ route('objetos.index') }}" class="btn btn-warning btn-lg btn-landing">Objetos</a>
-            <a href="{{ route('cortinas.index') }}" class="btn btn-info btn-lg btn-landing">Cortinas</a>
-            <a href="{{ route('aires.index') }}" class="btn btn-danger btn-lg btn-landing">Aire Acondicionado</a>
-        </div>
-    </section>
+    .options-section {
+        margin: 4rem auto;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 1rem;
+        max-width: 300px;
+    }
 
-    {{-- Bootstrap JS --}}
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    .options-section a {
+        color: white;
+        border: 1px solid white;
+        font-weight: 300;
+        font-size: 0.9rem;
+        padding: 0.5rem 1rem;
+        text-decoration: none;
+        background-color: transparent;
+        transition: all 0.3s ease;
+        border-radius: 1rem;
+        width: 100%;
+        text-align: center;
+    }
 
-    {{-- Pequeña animación extra con JS --}}
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const hero = document.querySelector('.hero');
-            hero.addEventListener('mousemove', e => {
-                const x = (window.innerWidth / 2 - e.pageX) / 30;
-                const y = (window.innerHeight / 2 - e.pageY) / 30;
-                hero.style.transform = `rotateX(${y}deg) rotateY(${x}deg)`;
-            });
-        });
-    </script>
-</body>
-</html>
+    .options-section a:hover {
+        background-color: rgba(255,255,255,0.1);
+        transform: scale(1.05);
+    }
+
+    html {
+        scroll-behavior: smooth;
+    }
+</style>
+
+<div class="hero-box">
+    <h1>
+        <span class="italic">Bienvenidos</span>
+        <span class="normal">Al Aula Virtual</span>
+    </h1>
+    <p>
+        Gestiona aulas, profesores, objetos y sistemas automatizados de manera fácil e intuitiva.
+    </p>
+
+    <a href="#opciones" class="btn-outline-light">Empezar</a>
+</div>
+
+{{-- Sección de botones de opciones --}}
+<div id="opciones" class="options-section">
+    <a href="{{ route('aulas.index') }}">Aulas</a>
+    <a href="{{ route('profesores.index') }}">Profesores</a>
+    <a href="{{ route('objetos.index') }}">Objetos</a>
+    <a href="{{ route('cortinas.index') }}">Cortinas</a>
+    <a href="{{ route('aires.index') }}">Aire Acondicionado</a>
+    <a href="{{ route('horarios.index') }}">Horarios</a>
+    <a href="{{ route('focos.index') }}">Focos</a>
+</div>
+
+{{-- Fuente Playfair Display --}}
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital@1&display=swap" rel="stylesheet">
+@endsection

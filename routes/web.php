@@ -2,33 +2,35 @@
 
 use Illuminate\Support\Facades\Route;
 
+// Controladores de tu app
 use App\Http\Controllers\AulaController;
-
 use App\Http\Controllers\ProfesorController;
-
 use App\Http\Controllers\ObjetoController;
-
 use App\Http\Controllers\CortinaController;
-
-use App\Http\Controllers\AireAcondicionadoController;
-
+use App\Http\Controllers\AireController;
+use App\Http\Controllers\HorarioController;
 use App\Http\Controllers\BusquedaController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\FocoController;
 
-Route::get('/buscar', [BusquedaController::class, 'index'])->name('buscar');
-
-
-Route::resource('cortinas', CortinaController::class);
-
-Route::resource('aulas', AulaController::class);
-
-Route::resource('objetos', ObjetoController::class);
-
-Route::resource('aires', AireAcondicionadoController::class);
-
+// RUTA PRINCIPAL
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('welcome'); // <--- Importante para que route('welcome') funcione
 
+// RUTAS DE RECURSOS
+Route::resource('aulas', AulaController::class);
 Route::resource('profesores', ProfesorController::class)->parameters([
     'profesores' => 'profesor'
 ]);
+Route::resource('objetos', ObjetoController::class);
+Route::resource('cortinas', CortinaController::class);
+Route::resource('aires', AireController::class);
+Route::resource('horarios', HorarioController::class);
+Route::resource('focos', FocoController::class);
+
+// BUSCADOR
+Route::get('/buscar', [BusquedaController::class, 'buscar'])->name('buscar');
+
+// RUTAS DE AUTENTICACIÓN
+require __DIR__.'/auth.php';
