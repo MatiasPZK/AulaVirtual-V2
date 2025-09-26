@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 
 class CortinaController extends Controller
 {
+    // ------------------- WEB -------------------
     public function index()
     {
         $cortinas = Cortina::with('aula')->get();
@@ -64,5 +65,40 @@ class CortinaController extends Controller
     {
         $cortina->delete();
         return redirect()->route('cortinas.index')->with('success', 'Cortina eliminada correctamente');
+    }
+
+    // ------------------- API -------------------
+    // GET -> el ESP32 consulta estado
+    public function apiShow(Cortina $cortina)
+    {
+        return response()->json([
+            'id' => $cortina->id,
+            'estado' => $cortina->estado ? 'abierta' : 'cerrada',
+            'automatica' => (bool) $cortina->automatica,
+            'hora_apertura' => $cortina->hora_apertura,
+            'hora_cierre' => $cortina->hora_cierre,
+            'aula' => $cortina->aula->nombre ?? null,
+        ]);
+    }
+
+    // POST/PUT -> el ESP32 actualiza estado
+    public function apiUpdate(Request $request, Cortina $cortina)
+    {
+        $request->validate([
+            'estado' => 'required|string|in:abierta,cerrada',
+            'temperatura' => 'nullable|numeric',
+            'luz' => 'nullable|numeric',
+        ]);
+
+        // Guardar estado en BD
+        $cortina->estado = $request->estado === 'abierta';
+        $cortina->save();
+
+        return response()->json([
+            'message' => 'Estado actualizado',
+            'estado' => $request->estado,
+            'temperatura' => $request->temperatura,
+            'luz' => $request->luz,
+        ]);
     }
 }

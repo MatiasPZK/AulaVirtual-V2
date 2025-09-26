@@ -9,9 +9,22 @@ class Horario extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['profesor_id', 'dia', 'hora', 'materia'];
+    protected $fillable = [
+        'profesor_id',
+        'aula_id',
+        'fecha',
+        'hora_inicio',
+        'hora_fin',
+        'materia'
+    ];
 
-    public function profesor() {
+    public function profesor()
+    {
         return $this->belongsTo(Profesor::class);
+    }
+
+    public function aula()
+    {
+        return $this->belongsTo(Aula::class);
     }
 }

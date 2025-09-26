@@ -1,53 +1,61 @@
 @extends('layouts.app')
 
-@section('title', 'Agregar Horario')
-
 @section('content')
-<div class="container mt-5">
-    <h2 class="mb-4"><i class="bi bi-plus-circle"></i> Agregar Horario</h2>
+<div class="container">
+    <h1 class="mb-4">Listado de Horarios</h1>
 
-    <form action="{{ route('horarios.store') }}" method="POST">
-        @csrf
-
-        {{-- Profesor --}}
-        <div class="mb-3">
-            <label for="profesor_id" class="form-label">Profesor</label>
-            <select name="profesor_id" id="profesor_id" class="form-select" required>
-                <option value="">Selecciona un profesor</option>
-                @foreach($profesores as $profesor)
-                    <option value="{{ $profesor->id }}">{{ $profesor->nombre }}</option>
-                @endforeach
-            </select>
+    {{-- Mensajes de éxito --}}
+    @if(session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
         </div>
+    @endif
 
-        {{-- Día --}}
-        <div class="mb-3">
-            <label for="dia" class="form-label">Día</label>
-            <select name="dia" id="dia" class="form-select" required>
-                @foreach(['Lunes','Martes','Miércoles','Jueves','Viernes'] as $dia)
-                    <option value="{{ $dia }}">{{ $dia }}</option>
-                @endforeach
-            </select>
-        </div>
+    {{-- Botón para crear nuevo horario --}}
+    <div class="mb-3">
+        <a href="{{ route('horarios.create') }}" class="btn btn-primary">➕ Nuevo Horario</a>
+    </div>
 
-        {{-- Hora --}}
-        <div class="mb-3">
-            <label for="hora" class="form-label">Hora</label>
-            <select name="hora" id="hora" class="form-select" required>
-                @foreach(['1° Hora','2° Hora','3° Hora','4° Hora','5° Hora','6° Hora','7° Hora','8° Hora'] as $hora)
-                    <option value="{{ $hora }}">{{ $hora }}</option>
-                @endforeach
-            </select>
-        </div>
+    {{-- Tabla de horarios --}}
+    <table class="table table-bordered table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>Aula</th>
+                <th>Profesor</th>
+                <th>Fecha</th>
+                <th>Hora Inicio</th>
+                <th>Hora Fin</th>
+                <th>Materia</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @forelse($horarios as $horario)
+                <tr>
+                    <td>{{ $horario->aula->nombre ?? 'Sin aula' }}</td>
+                    <td>{{ $horario->profesor->nombre ?? 'Sin profesor' }}</td>
+                    <td>{{ \Carbon\Carbon::parse($horario->fecha)->format('d/m/Y') }}</td>
+                    <td>{{ $horario->hora_inicio }}</td>
+                    <td>{{ $horario->hora_fin }}</td>
+                    <td>{{ $horario->materia ?? '-' }}</td>
+                    <td>
+                        <a href="{{ route('horarios.edit', $horario->id) }}" class="btn btn-sm btn-warning">✏️ Editar</a>
 
-        {{-- Materia --}}
-        <div class="mb-3">
-            <label for="materia" class="form-label">Materia</label>
-            <input type="text" name="materia" id="materia" class="form-control" placeholder="Opcional">
-        </div>
-
-        <button type="submit" class="btn btn-primary"><i class="bi bi-save"></i> Guardar</button>
-        <a href="{{ route('horarios.index') }}" class="btn btn-secondary">Cancelar</a>
-    </form>
+                        <form action="{{ route('horarios.destroy', $horario->id) }}" method="POST" style="display:inline-block;">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('¿Seguro que quieres eliminar este horario?')">
+                                🗑️ Eliminar
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            @empty
+                <tr>
+                    <td colspan="7" class="text-center">No hay horarios registrados</td>
+                </tr>
+            @endforelse
+        </tbody>
+    </table>
 </div>
 @endsection

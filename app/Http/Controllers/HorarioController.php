@@ -14,9 +14,9 @@ class HorarioController extends Controller
      */
     public function index()
     {
-        $horarios = Horario::with('profesor', 'aula')->get(); // traer relación con aula también
+        $horarios = Horario::with('profesor', 'aula')->get();
         $profesores = Profesor::all();
-        $aulas = Aula::all(); // importante pasar esto a la vista
+        $aulas = Aula::all();
 
         return view('horarios.index', compact('horarios', 'profesores', 'aulas'));
     }
@@ -27,7 +27,7 @@ class HorarioController extends Controller
     public function create()
     {
         $profesores = Profesor::all();
-        $aulas = Aula::all(); // para seleccionar aula al crear
+        $aulas = Aula::all();
 
         return view('horarios.create', compact('profesores', 'aulas'));
     }
@@ -39,13 +39,14 @@ class HorarioController extends Controller
     {
         $request->validate([
             'profesor_id' => 'required|exists:profesores,id',
-            'aula_id' => 'required|exists:aulas,id', // validar aula
-            'dia' => 'required|string',
-            'hora' => 'required|string',
+            'aula_id' => 'required|exists:aulas,id',
+            'fecha' => 'required|date',
+            'hora_inicio' => 'required|date_format:H:i',
+            'hora_fin' => 'required|date_format:H:i|after:hora_inicio',
             'materia' => 'nullable|string|max:255',
         ]);
 
-        Horario::create($request->only('profesor_id', 'aula_id', 'dia', 'hora', 'materia'));
+        Horario::create($request->only('profesor_id', 'aula_id', 'fecha', 'hora_inicio', 'hora_fin', 'materia'));
 
         return redirect()->route('horarios.index')
                          ->with('success', 'Horario asignado correctamente.');
@@ -58,7 +59,7 @@ class HorarioController extends Controller
     {
         $horario = Horario::findOrFail($id);
         $profesores = Profesor::all();
-        $aulas = Aula::all(); // para seleccionar aula al editar
+        $aulas = Aula::all();
 
         return view('horarios.edit', compact('horario', 'profesores', 'aulas'));
     }
@@ -71,13 +72,14 @@ class HorarioController extends Controller
         $request->validate([
             'profesor_id' => 'required|exists:profesores,id',
             'aula_id' => 'required|exists:aulas,id',
-            'dia' => 'required|string',
-            'hora' => 'required|string',
+            'fecha' => 'required|date',
+            'hora_inicio' => 'required|date_format:H:i',
+            'hora_fin' => 'required|date_format:H:i|after:hora_inicio',
             'materia' => 'nullable|string|max:255',
         ]);
 
         $horario = Horario::findOrFail($id);
-        $horario->update($request->only('profesor_id', 'aula_id', 'dia', 'hora', 'materia'));
+        $horario->update($request->only('profesor_id', 'aula_id', 'fecha', 'hora_inicio', 'hora_fin', 'materia'));
 
         return redirect()->route('horarios.index')
                          ->with('success', 'Horario actualizado correctamente.');

@@ -31,6 +31,8 @@ Route::resource('focos', FocoController::class);
 
 // BUSCADOR
 Route::get('/buscar', [BusquedaController::class, 'buscar'])->name('buscar');
+Route::get('/cortinas/{cortina}', [CortinaController::class, 'apiShow']);
+Route::post('/cortinas/{cortina}', [CortinaController::class, 'apiUpdate']);
 
 // RUTAS DE AUTENTICACIÓN
 require __DIR__.'/auth.php';

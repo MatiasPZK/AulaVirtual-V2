@@ -16,11 +16,22 @@ return new class extends Migration
         Schema::create('horarios', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+    
+    // Relación con profesor
             $table->foreignId('profesor_id')->constrained('profesores')->onDelete('cascade');
-            $table->string('dia'); // Lunes, Martes, etc
-            $table->string('hora'); // 1°, 2°, 3°, etc
-            $table->string('materia')->nullable(); // opcional
+    
+    // Relación con aula
+            $table->foreignId('aula_id')->constrained('aulas')->onDelete('cascade');
+    
+    // Información del horario
+            $table->date('fecha');
+            $table->time('hora_inicio');
+            $table->time('hora_fin');
+    
+    // Materia opcional
+            $table->string('materia')->nullable();
         });
+
     }
 
     /**

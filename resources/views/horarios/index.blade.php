@@ -1,65 +1,61 @@
 @extends('layouts.app')
 
-@section('title', 'Horarios')
-
 @section('content')
-<div class="container mt-5">
-    <h2 class="text-center mb-4 animate__animated animate__fadeInDown">
-        <i class="bi bi-calendar-event"></i> Horarios de Profesores
-    </h2>
+<div class="container">
+    <h1 class="mb-4">Listado de Horarios</h1>
 
-    @php
-        $dias = ['Lunes','Martes','Miércoles','Jueves','Viernes'];
-        $horas = ['1° Hora','2° Hora','3° Hora','4° Hora','5° Hora','6° Hora','7° Hora','8° Hora'];
-    @endphp
+    {{-- Mensajes de éxito --}}
+    @if(session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
 
-    <div class="table-responsive animate__animated animate__fadeInUp">
-        <table class="table table-bordered text-center align-middle">
-            <thead class="table-dark">
-                <tr>
-                    <th>Hora / Día</th>
-                    @foreach($dias as $dia)
-                        <th>{{ $dia }}</th>
-                    @endforeach
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($horas as $hora)
-                    <tr>
-                        <th class="table-secondary">{{ $hora }}</th>
-                        @foreach($dias as $dia)
-                            @php
-                                $asignacion = $horarios->first(function($h) use ($dia, $hora) {
-                                    return $h->dia === $dia && $h->hora === $hora;
-                                });
-                            @endphp
-                            <td class="{{ $asignacion ? 'table-info' : 'table-success' }}">
-                                @if($asignacion)
-                                    <strong>{{ $asignacion->profesor->nombre ?? 'Sin profesor' }}</strong><br>
-                                    {{ $asignacion->materia ?? '' }}
-                                    <div class="mt-1">
-                                        <a href="{{ route('horarios.edit', $asignacion->id) }}" class="btn btn-sm btn-warning">Editar</a>
-                                        <form action="{{ route('horarios.destroy', $asignacion->id) }}" method="POST" class="d-inline">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('¿Seguro que quieres eliminar este horario?')">Eliminar</button>
-                                        </form>
-                                    </div>
-                                @else
-                                    {{-- Botón que lleva a create --}}
-                                    <a href="{{ route('horarios.create', ['dia' => $dia, 'hora' => $hora]) }}" class="btn btn-sm btn-success">
-                                        Reservar
-                                    </a>
-                                @endif
-                            </td>
-                        @endforeach
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
+    {{-- Botón para crear nuevo horario --}}
+    <div class="mb-3">
+        <a href="{{ route('horarios.create') }}" class="btn btn-primary">➕ Nuevo Horario</a>
     </div>
-</div>
 
-{{-- Bootstrap Icons --}}
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    {{-- Tabla de horarios --}}
+    <table class="table table-bordered table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>Aula</th>
+                <th>Profesor</th>
+                <th>Fecha</th>
+                <th>Hora Inicio</th>
+                <th>Hora Fin</th>
+                <th>Materia</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @forelse($horarios as $horario)
+                <tr>
+                    <td>{{ $horario->aula->nombre ?? 'Sin aula' }}</td>
+                    <td>{{ $horario->profesor->nombre ?? 'Sin profesor' }}</td>
+                    <td>{{ \Carbon\Carbon::parse($horario->fecha)->format('d/m/Y') }}</td>
+                    <td>{{ $horario->hora_inicio }}</td>
+                    <td>{{ $horario->hora_fin }}</td>
+                    <td>{{ $horario->materia ?? '-' }}</td>
+                    <td>
+                        <a href="{{ route('horarios.edit', $horario->id) }}" class="btn btn-sm btn-warning">✏️ Editar</a>
+
+                        <form action="{{ route('horarios.destroy', $horario->id) }}" method="POST" style="display:inline-block;">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('¿Seguro que quieres eliminar este horario?')">
+                                🗑️ Eliminar
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            @empty
+                <tr>
+                    <td colspan="7" class="text-center">No hay horarios registrados</td>
+                </tr>
+            @endforelse
+        </tbody>
+    </table>
+</div>
 @endsection
