@@ -17,7 +17,8 @@ return new class extends Migration
             $table->id();
             $table->string('nombre');
             $table->integer('capacidad')->nullable();
-            $table->text('profesores')->nullable(); // guardamos nombres como texto por ahora
+            $table->text('profesores')->nullable(); 
+            $table->foreignId('profesor_id')->nullable()->constrained('profesores')->onDelete('set null');
             $table->timestamps();
         });
     }

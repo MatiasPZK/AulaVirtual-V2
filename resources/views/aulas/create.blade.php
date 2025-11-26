@@ -27,18 +27,29 @@
                         @csrf
 
                         <div class="mb-3">
-                            <label for="nombre" class="form-label"><i class="bi bi-door-closed"></i> Nombre del Aula</label>
+                            <label for="nombre" class="form-label">
+                                <i class="bi bi-door-closed"></i> Nombre del Aula
+                            </label>
                             <input type="text" class="form-control form-control-lg" id="nombre" name="nombre" placeholder="Ej: Aula 101" required>
                         </div>
 
                         <div class="mb-3">
-                            <label for="capacidad" class="form-label"><i class="bi bi-people"></i> Capacidad</label>
+                            <label for="capacidad" class="form-label">
+                                <i class="bi bi-people"></i> Capacidad
+                            </label>
                             <input type="number" class="form-control form-control-lg" id="capacidad" name="capacidad" placeholder="Cantidad de alumnos">
                         </div>
 
                         <div class="mb-3">
-                            <label for="profesores" class="form-label"><i class="bi bi-person-badge"></i> Profesores</label>
-                            <input type="text" class="form-control form-control-lg" id="profesores" name="profesores" placeholder="Separar nombres con coma">
+                            <label for="profesor_id" class="form-label">
+                                <i class="bi bi-person-badge"></i> Profesor asignado
+                            </label>
+                            <select class="form-select form-select-lg" id="profesor_id" name="profesor_id" required>
+                                <option value="">-- Seleccionar profesor --</option>
+                                @foreach ($profesores as $profesor)
+                                    <option value="{{ $profesor->id }}">{{ $profesor->nombre }}</option>
+                                @endforeach
+                            </select>
                         </div>
 
                         <div class="d-grid">

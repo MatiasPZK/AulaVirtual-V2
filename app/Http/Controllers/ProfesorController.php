@@ -37,24 +37,33 @@ class ProfesorController extends Controller
 
     public function update(Request $request, Profesor $profesor)
     {
-        $request->validate([
+        $validated = $request->validate([
             'nombre' => 'required|string|max:255',
-            'especialidad' => 'nullable|string|max:255',
+            'capacidad' => 'nullable|integer',
+            'profesor_id' => 'nullable|exists:profesores,id',
         ]);
 
-        $profesor->update($request->only('nombre','especialidad'));
+        $aula = Aula::findOrFail($id);
+        $aula->update($validated);
 
-        return redirect()->route('profesores.index')->with('success', 'Profesor actualizado correctamente');
-    }
+    // actualizar profesor asignado
+        if (!empty($validated['profesor_id'])) {
+            $profesor = \App\Models\Profesor::find($validated['profesor_id']);
+            $profesor->aula_id = $aula->id;
+            $profesor->save();
+        }
 
-    public function destroy(Profesor $profesor)
-    {
-        $profesor->delete();
-        return redirect()->route('profesores.index')->with('success', 'Profesor eliminado correctamente');
-    }
+        return redirect()->route('aulas.index')->with('success', 'Aula actualizada correctamente.');
+        }
 
-    public function show(Profesor $profesor)
-    {
-        return view('profesores.show', compact('profesor'));
-    }
+        public function destroy(Profesor $profesor)
+        {
+            $profesor->delete();
+            return redirect()->route('profesores.index')->with('success', 'Profesor eliminado correctamente');
+        }
+
+        public function show(Profesor $profesor)
+        {
+            return view('profesores.show', compact('profesor'));
+        }
 }

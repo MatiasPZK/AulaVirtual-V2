@@ -13,10 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('aulas', function (Blueprint $table) {
-            $table->text('profesores')->nullable();
+        Schema::create('sensors', function (Blueprint $table) {
+            $table->id();
+            $table->string('tipo');
+            $table->float('valor');
+            $table->timestamps();
         });
-
     }
 
     /**
@@ -26,8 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('aulas', function (Blueprint $table) {
-            $table->dropColumn('profesores');
-        });
+        Schema::dropIfExists('sensors');
     }
 };

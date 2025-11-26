@@ -20,7 +20,7 @@ return new class extends Migration
             $table->time('hora_apertura')->nullable();
             $table->time('hora_cierre')->nullable();
             $table->json('dias')->nullable(); // Guardamos los días como array JSON
-            $table->boolean('estado')->default(false); // false = cerrada, true = abierta
+            $table->string('estado')->default('cerrada'); // false = cerrada, true = abierta
             $table->boolean('automatica')->default(false); // control por clima
             $table->timestamps();
         });

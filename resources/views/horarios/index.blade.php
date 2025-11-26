@@ -2,59 +2,56 @@
 
 @section('content')
 <div class="container">
-    <h1 class="mb-4">Listado de Horarios</h1>
+    <h1 class="mb-4 text-center">Horario Escolar</h1>
 
-    {{-- Mensajes de éxito --}}
-    @if(session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
+    @php
+        $dias = ['lunes','martes','miercoles','jueves','viernes'];
+        // Bloques de horario (pueden coincidir con tu modelo)
+        $bloques = \App\Models\Horario::$bloques;
+        $bloquesRecreo = [3, 6, 9]; // los bloques de recreo
+    @endphp
 
-    {{-- Botón para crear nuevo horario --}}
-    <div class="mb-3">
-        <a href="{{ route('horarios.create') }}" class="btn btn-primary">➕ Nuevo Horario</a>
-    </div>
-
-    {{-- Tabla de horarios --}}
-    <table class="table table-bordered table-hover">
+    <table class="table table-bordered text-center align-middle">
         <thead class="table-dark">
             <tr>
-                <th>Aula</th>
-                <th>Profesor</th>
-                <th>Fecha</th>
-                <th>Hora Inicio</th>
-                <th>Hora Fin</th>
-                <th>Materia</th>
-                <th>Acciones</th>
+                <th>Hora</th>
+                @foreach($dias as $dia)
+                    <th class="text-capitalize">{{ $dia }}</th>
+                @endforeach
             </tr>
         </thead>
-        <tbody>
-            @forelse($horarios as $horario)
-                <tr>
-                    <td>{{ $horario->aula->nombre ?? 'Sin aula' }}</td>
-                    <td>{{ $horario->profesor->nombre ?? 'Sin profesor' }}</td>
-                    <td>{{ \Carbon\Carbon::parse($horario->fecha)->format('d/m/Y') }}</td>
-                    <td>{{ $horario->hora_inicio }}</td>
-                    <td>{{ $horario->hora_fin }}</td>
-                    <td>{{ $horario->materia ?? '-' }}</td>
-                    <td>
-                        <a href="{{ route('horarios.edit', $horario->id) }}" class="btn btn-sm btn-warning">✏️ Editar</a>
 
-                        <form action="{{ route('horarios.destroy', $horario->id) }}" method="POST" style="display:inline-block;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('¿Seguro que quieres eliminar este horario?')">
-                                🗑️ Eliminar
-                            </button>
-                        </form>
+        <tbody>
+        @foreach($bloques as $num => $rango)
+            <tr>
+                <td class="fw-bold">{{ $rango }}</td>
+                
+                @foreach($dias as $dia)
+                    @php
+                        $h = $horarios
+                            ->where('dia', $dia)
+                            ->where('bloque', $num)
+                            ->first();
+                    @endphp
+
+                    <td style="min-width: 120px; 
+                               {{ in_array($num, $bloquesRecreo) ? 'background-color:#f0f0f0;' : '' }}">
+                        @if(in_array($num, $bloquesRecreo))
+                            {{-- Bloque de recreo: vacío --}}
+                            <span class="text-muted">Recreo</span>
+                        @elseif($h)
+                            <strong>{{ $h->materia }}</strong><br>
+                            <small>{{ $h->profesor->nombre ?? '' }}</small>
+                        @else
+                            <a class="btn btn-sm btn-success"
+                               href="{{ route('horarios.create', ['dia' => $dia, 'bloque' => $num]) }}">
+                                +
+                            </a>
+                        @endif
                     </td>
-                </tr>
-            @empty
-                <tr>
-                    <td colspan="7" class="text-center">No hay horarios registrados</td>
-                </tr>
-            @endforelse
+                @endforeach
+            </tr>
+        @endforeach
         </tbody>
     </table>
 </div>

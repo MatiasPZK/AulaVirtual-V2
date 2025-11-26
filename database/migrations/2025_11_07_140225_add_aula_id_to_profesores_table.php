@@ -11,12 +11,13 @@ return new class extends Migration
      *
      * @return void
      */
-    public function up(): void
+    public function up()
     {
         Schema::table('profesores', function (Blueprint $table) {
-            if (Schema::hasColumn('profesores', 'aula')) {
-                $table->dropColumn('aula');
-            }
+            $table->foreignId('aula_id')
+                ->nullable()
+                ->constrained('aulas')
+                ->onDelete('set null');
         });
     }
 
@@ -28,7 +29,8 @@ return new class extends Migration
     public function down()
     {
         Schema::table('profesores', function (Blueprint $table) {
-            $table->string('aula')->nullable();
+            $table->dropForeign(['aula_id']);
+            $table->dropColumn('aula_id');
         });
     }
 };

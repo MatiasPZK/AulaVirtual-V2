@@ -30,6 +30,9 @@ return new class extends Migration
     
     // Materia opcional
             $table->string('materia')->nullable();
+
+            $table->string('dia'); // lunes, martes...
+            $table->unsignedTinyInteger('bloque'); // 1 al 12 (cada bloque)
         });
 
     }

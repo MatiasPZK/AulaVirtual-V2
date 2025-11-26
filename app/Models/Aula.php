@@ -9,10 +9,15 @@ class Aula extends Model
 {
     use HasFactory;
 
-    // Campos que se pueden llenar masivamente
     protected $fillable = [
         'nombre',
         'capacidad',
-        'profesores', // si lo guardás como texto o JSON por ahora
+        'profesor_id',
     ];
+
+    public function profesor()
+    {
+        return $this->belongsTo(\App\Models\Profesor::class);
+    }
 }
+

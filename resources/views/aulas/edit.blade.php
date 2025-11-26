@@ -28,25 +28,40 @@
                         @method('PUT')
 
                         <div class="mb-3">
-                            <label for="nombre" class="form-label"><i class="bi bi-door-closed"></i> Nombre del Aula</label>
+                            <label for="nombre" class="form-label">
+                                <i class="bi bi-door-closed"></i> Nombre del Aula
+                            </label>
                             <input type="text" class="form-control form-control-lg" id="nombre" name="nombre"
-                                   value="{{ $aula->nombre }}" required>
+                                   value="{{ old('nombre', $aula->nombre) }}" required>
                         </div>
 
                         <div class="mb-3">
-                            <label for="capacidad" class="form-label"><i class="bi bi-people"></i> Capacidad</label>
+                            <label for="capacidad" class="form-label">
+                                <i class="bi bi-people"></i> Capacidad
+                            </label>
                             <input type="number" class="form-control form-control-lg" id="capacidad" name="capacidad"
-                                   value="{{ $aula->capacidad }}">
+                                   value="{{ old('capacidad', $aula->capacidad) }}">
                         </div>
 
                         <div class="mb-3">
-                            <label for="profesores" class="form-label"><i class="bi bi-person-badge"></i> Profesores</label>
-                            <input type="text" class="form-control form-control-lg" id="profesores" name="profesores"
-                                   value="{{ $aula->profesores }}">
+                            <label for="profesor_id" class="form-label">
+                                <i class="bi bi-person-badge"></i> Profesor Asignado
+                            </label>
+                            <select name="profesor_id" id="profesor_id" class="form-select form-select-lg">
+                                <option value="">-- Seleccionar Profesor --</option>
+                                @foreach ($profesores as $profesor)
+                                    <option value="{{ $profesor->id }}"
+                                        {{ $aula->profesor && $aula->profesor->id == $profesor->id ? 'selected' : '' }}>
+                                        {{ $profesor->nombre }}
+                                    </option>
+                                @endforeach
+                            </select>
                         </div>
 
                         <div class="d-grid">
-                            <button type="submit" class="btn btn-warning btn-lg">Actualizar Aula</button>
+                            <button type="submit" class="btn btn-warning btn-lg">
+                                Actualizar Aula
+                            </button>
                         </div>
                     </form>
                 </div>

@@ -5,8 +5,13 @@ use Illuminate\Support\Facades\Route;
 use App\Models\Foco;
 use App\Models\Cortina;
 use App\Models\Aire;
+use App\Http\Controllers\SensorController;
+use App\Http\Controllers\CortinaController;
+
 
 Route::post('/sensores', [SensorController::class, 'store']);
+Route::get('/cortinas/{cortina}', [CortinaController::class, 'apiShow']); // ESP32 consulta estado
+Route::post('/cortinas/{cortina}', [CortinaController::class, 'apiUpdate']); // ESP32 actualiza estado
 
 Route::get('/config', function () {
     return response()->json([
@@ -17,7 +22,7 @@ Route::get('/config', function () {
     ]);
 });
 
-// ✅ Estado de usuario (si se necesita)
+// Estado de usuario (si se necesita)
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });

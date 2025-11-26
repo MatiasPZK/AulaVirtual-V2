@@ -15,4 +15,10 @@ class Profesor extends Model
         'nombre',
         'especialidad',
     ];
+
+    public function aula()
+    {
+        return $this->belongsTo(\App\Models\Aula::class);
+    }
+
 }

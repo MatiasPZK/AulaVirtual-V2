@@ -16,10 +16,22 @@
             <div class="col-md-6 mb-4">
                 <div class="card shadow-sm border-0 h-100">
                     <div class="card-header bg-primary text-white">
-                        <h5 class="mb-0"><i class="bi bi-person"></i> {{ $profesor->nombre }}</h5>
+                        <h5 class="mb-0">
+                            <i class="bi bi-person"></i> {{ $profesor->nombre }}
+                        </h5>
                     </div>
                     <div class="card-body">
-                        <p><i class="bi bi-book"></i> <strong>Especialidad:</strong> {{ $profesor->especialidad ?? 'No definida' }}</p>
+                        <p>
+                            <i class="bi bi-book"></i>
+                            <strong>Especialidad:</strong>
+                            {{ $profesor->especialidad ?? 'No definida' }}
+                        </p>
+
+                        <p>
+                            <i class="bi bi-door-closed"></i>
+                            <strong>Aula asignada:</strong>
+                            {{ $profesor->aula->nombre ?? 'Sin asignar' }}
+                        </p>
                     </div>
                     <div class="card-footer text-end bg-light">
                         <a href="{{ route('profesores.edit', $profesor->id) }}" class="btn btn-sm btn-warning">
@@ -45,5 +57,6 @@
     </div>
 </div>
 
+<!-- Bootstrap Icons -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 @endsection
